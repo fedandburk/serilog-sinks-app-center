@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
         <PackageId>Fedandburk.Serilog.Sinks.AppCenter</PackageId>
         <PackageVersion>1.0.3</PackageVersion>
         <Title>App Center sink for Serilog</Title>

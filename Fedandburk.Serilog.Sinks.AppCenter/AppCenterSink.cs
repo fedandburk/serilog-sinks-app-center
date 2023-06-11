@@ -15,9 +15,9 @@ namespace SByteDev.Serilog.Sinks.AppCenter;
 /// </summary>
 public sealed class AppCenterSink : ILogEventSink
 {
-    private readonly IFormatProvider _formatProvider;
+    private readonly IFormatProvider? _formatProvider;
 
-    public AppCenterSink(IFormatProvider formatProvider)
+    public AppCenterSink(IFormatProvider? formatProvider)
     {
         _formatProvider = formatProvider;
     }
@@ -59,9 +59,9 @@ public sealed class AppCenterSink : ILogEventSink
 
     private IDictionary<string, string> GetProperties(LogEvent logEvent)
     {
-        return logEvent.Properties?.ToDictionary(
+        return logEvent.Properties.ToDictionary(
             item => item.Key,
-            item => item.Value?.ToString(null, _formatProvider)
+            item => item.Value.ToString(null, _formatProvider)
         );
     }
 }

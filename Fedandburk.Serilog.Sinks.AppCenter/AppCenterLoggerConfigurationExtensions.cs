@@ -22,8 +22,8 @@ public static class AppCenterLoggerConfigurationExtensions
     public static LoggerConfiguration AppCenter(
         this LoggerSinkConfiguration sinkConfiguration,
         LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
-        LoggingLevelSwitch levelSwitch = null,
-        IFormatProvider formatProvider = null
+        LoggingLevelSwitch? levelSwitch = null,
+        IFormatProvider? formatProvider = null
     )
     {
         if (sinkConfiguration == null)
