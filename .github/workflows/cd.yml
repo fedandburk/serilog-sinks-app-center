@@ -23,9 +23,15 @@ jobs:
 
     - name: Build
       run: dotnet pack --configuration Release
-    
+      
+    - name: Add GitHub Packages source
+      run: dotnet nuget add source --username ${{ secrets.USERNAME }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github.com "https://nuget.pkg.github.com/fedandburk/index.json"
+
     - name: Upload to NuGet
       run: dotnet nuget push Fedandburk.Serilog.Sinks.AppCenter/bin/Release/*.nupkg --source nuget.org --api-key ${{secrets.NUGET_API_KEY}} --skip-duplicate
+
+    - name: Upload to GitHub Packages
+      run: dotnet nuget push Fedandburk.Serilog.Sinks.AppCenter/bin/Release/*.nupkg --source github.com --api-key ${{secrets.GITHUB_TOKEN}} --skip-duplicate
 
     - name: Create GitHub release
       uses: softprops/action-gh-release@v1

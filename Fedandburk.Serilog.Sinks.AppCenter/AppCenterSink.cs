@@ -1,68 +1,64 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Serilog.Core;
 using Serilog.Events;
 
-namespace SByteDev.Serilog.Sinks.AppCenter
+namespace Fedandburk.Serilog.Sinks.AppCenter;
+
+/// <summary>
+/// Serilog sink that logs events to AppCenter.
+/// AppCenter should be configured before: https://docs.microsoft.com/en-us/appcenter/sdk/getting-started/xamarin
+/// If an Exception is specified, the log event will be logged using Crashes, otherwise Analytics will be used.
+/// </summary>
+public sealed class AppCenterSink : ILogEventSink
 {
-    /// <summary>
-    /// Serilog sink that logs events to AppCenter.
-    /// AppCenter should be configured before: https://docs.microsoft.com/en-us/appcenter/sdk/getting-started/xamarin
-    /// If an Exception is specified, the log event will be logged using Crashes, otherwise Analytics will be used.
-    /// </summary>
-    public sealed class AppCenterSink : ILogEventSink
+    private readonly IFormatProvider? _formatProvider;
+
+    public AppCenterSink(IFormatProvider? formatProvider)
     {
-        private readonly IFormatProvider _formatProvider;
+        _formatProvider = formatProvider;
+    }
 
-        public AppCenterSink(IFormatProvider formatProvider)
+    public void Emit(LogEvent logEvent)
+    {
+        if (logEvent == null)
         {
-            _formatProvider = formatProvider;
+            throw new ArgumentNullException(nameof(logEvent));
         }
 
-        public void Emit(LogEvent logEvent)
+        if (logEvent.Exception != null)
         {
-            if (logEvent == null)
-            {
-                throw new ArgumentNullException(nameof(logEvent));
-            }
-
-            if (logEvent.Exception != null)
-            {
-                TrackError(logEvent);
-            }
-            else
-            {
-                TrackEvent(logEvent);
-            }
+            TrackError(logEvent);
         }
-
-        private void TrackEvent(LogEvent logEvent)
+        else
         {
-            var message = logEvent.RenderMessage(_formatProvider);
-            var properties = GetProperties(logEvent);
-
-            Analytics.TrackEvent(message, properties);
+            TrackEvent(logEvent);
         }
+    }
 
-        private void TrackError(LogEvent logEvent)
-        {
-            var exception = logEvent.Exception;
-            var properties = GetProperties(logEvent);
-            var message = logEvent.RenderMessage(_formatProvider);
-            var errorAttachmentLog = ErrorAttachmentLog.AttachmentWithText(message, null);
+    private void TrackEvent(LogEvent logEvent)
+    {
+        var message = logEvent.RenderMessage(_formatProvider);
+        var properties = GetProperties(logEvent);
 
-            Crashes.TrackError(exception, properties, errorAttachmentLog);
-        }
+        Analytics.TrackEvent(message, properties);
+    }
 
-        private IDictionary<string, string> GetProperties(LogEvent logEvent)
-        {
-            return logEvent.Properties?.ToDictionary(
-                item => item.Key,
-                item => item.Value?.ToString(null, _formatProvider)
-            );
-        }
+    private void TrackError(LogEvent logEvent)
+    {
+        var exception = logEvent.Exception;
+        var properties = GetProperties(logEvent);
+        var message = logEvent.RenderMessage(_formatProvider);
+        var errorAttachmentLog = ErrorAttachmentLog.AttachmentWithText(message, null);
+
+        Crashes.TrackError(exception, properties, errorAttachmentLog);
+    }
+
+    private IDictionary<string, string> GetProperties(LogEvent logEvent)
+    {
+        return logEvent.Properties.ToDictionary(
+            item => item.Key,
+            item => item.Value.ToString(null, _formatProvider)
+        );
     }
 }

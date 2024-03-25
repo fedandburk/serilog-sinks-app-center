@@ -22,5 +22,10 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
 
+    - name: Check code style with CSharpier
+      run: |
+          dotnet tool restore
+          dotnet csharpier --check .
+
     - name: Build
       run: dotnet build --configuration Release
