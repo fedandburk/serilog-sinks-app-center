@@ -5,7 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageId>Fedandburk.Serilog.Sinks.AppCenter</PackageId>
-        <PackageVersion>1.0.3</PackageVersion>
+        <PackageVersion>1.0.40</PackageVersion>
         <Title>App Center sink for Serilog</Title>
         <Description>Serilog sink that uses AppCenter.Analytics and AppCenter.Crashes to log events.</Description>
         <Copyright>FEDANDBURK</Copyright>
