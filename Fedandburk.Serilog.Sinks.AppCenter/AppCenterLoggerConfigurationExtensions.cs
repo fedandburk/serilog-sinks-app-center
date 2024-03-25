@@ -31,6 +31,10 @@ public static class AppCenterLoggerConfigurationExtensions
             throw new ArgumentNullException(nameof(sinkConfiguration));
         }
 
-        return sinkConfiguration.Sink(new AppCenterSink(formatProvider), restrictedToMinimumLevel, levelSwitch);
+        return sinkConfiguration.Sink(
+            new AppCenterSink(formatProvider),
+            restrictedToMinimumLevel,
+            levelSwitch
+        );
     }
 }
