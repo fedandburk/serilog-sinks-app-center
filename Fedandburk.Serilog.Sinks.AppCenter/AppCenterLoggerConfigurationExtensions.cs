@@ -3,7 +3,7 @@ using Serilog.Configuration;
 using Serilog.Core;
 using Serilog.Events;
 
-namespace SByteDev.Serilog.Sinks.AppCenter;
+namespace Fedandburk.Serilog.Sinks.AppCenter;
 
 public static class AppCenterLoggerConfigurationExtensions
 {

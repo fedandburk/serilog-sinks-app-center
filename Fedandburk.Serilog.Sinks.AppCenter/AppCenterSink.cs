@@ -3,7 +3,7 @@ using Microsoft.AppCenter.Crashes;
 using Serilog.Core;
 using Serilog.Events;
 
-namespace SByteDev.Serilog.Sinks.AppCenter;
+namespace Fedandburk.Serilog.Sinks.AppCenter;
 
 /// <summary>
 /// Serilog sink that logs events to AppCenter.
